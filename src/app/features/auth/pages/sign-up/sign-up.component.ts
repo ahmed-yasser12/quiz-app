@@ -2,14 +2,12 @@ import { Component, OnDestroy, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AdaptedVerifyCodeRes } from '../../../../../../projects/auth-api/src/lib/interfaces/adaptor/AdaptedVerifyCodeRes';
-
-import {  AuthApiService } from '../../../../../../projects/auth-api/src/lib/auth-api.service';
+import { AuthApiService } from '../../../../../../projects/auth-api/src/lib/auth-api.service';
+import { AdaptedSignUpRes } from '../../../../../../projects/auth-api/src/public-api';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -19,14 +17,10 @@ import { ToastModule } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
 import { DividerAndIconsComponent } from '../../components/divider-and-icons/divider-and-icons.component';
 import { AosDirective } from '../../../../shared/directives/aos.directive';
-import { AdaptedSignUpRes } from '../../../../../../projects/auth-api/src/public-api';
-
-
 @Component({
   selector: 'app-sign-up',
   imports: [
     ReactiveFormsModule,
-    FormsModule,
     RouterLink,
     InputTextModule,
     ButtonModule,
@@ -34,14 +28,14 @@ import { AdaptedSignUpRes } from '../../../../../../projects/auth-api/src/public
     MessageModule,
     PasswordModule,
     DividerAndIconsComponent,
-    AosDirective
+    AosDirective,
   ],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
-  
+
   messageService = inject(MessageService);
   _AuthApiService = inject(AuthApiService);
   private router = inject(Router);
@@ -87,13 +81,13 @@ export class SignUpComponent implements OnDestroy {
             Validators.required,
             Validators.minLength(8),
             Validators.pattern(
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
             ),
           ],
         ],
         rePassword: ['', [Validators.required]],
       },
-      { validators: this.passwordMatchValidator }
+      { validators: this.passwordMatchValidator },
     );
   }
 
@@ -128,7 +122,8 @@ export class SignUpComponent implements OnDestroy {
       });
 
       console.log(this.signUpForm.value);
-      this._AuthApiService.SignUp(this.signUpForm.value)
+      this._AuthApiService
+        .SignUp(this.signUpForm.value)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (res: AdaptedSignUpRes) => {
@@ -160,43 +155,21 @@ export class SignUpComponent implements OnDestroy {
               errorMessage =
                 'Server error occurred. Please try again later or contact support.';
             } else if (error.status === 409) {
-              // Handle conflict errors (duplicate username/email)
               if (error.error?.message) {
                 if (error.error.message.includes('username already exists')) {
                   errorMessage =
                     'This username is already taken. Please choose a different username.';
-                  // Clear only the username field
-                  this.signUpForm.get('username')?.setValue('');
-                } else if (error.error.message.includes('email already exists')) {
+                } else if (
+                  error.error.message.includes('email already exists')
+                ) {
                   errorMessage =
                     'This email is already registered. Please use a different email or try signing in.';
-                  // Clear only the email field
-                  this.signUpForm.get('email')?.setValue('');
                 } else {
                   errorMessage = error.error.message;
                 }
               } else {
                 errorMessage =
                   'This account already exists. Please try signing in instead.';
-              }
-            } else if (error.error?.message) {
-              if (error.error.message.includes('duplicate key error')) {
-                if (error.error.message.includes('email')) {
-                  errorMessage =
-                    'This email is already registered. Please use a different email or try signing in.';
-                  // Clear only the email field
-                  this.signUpForm.get('email')?.setValue('');
-                } else if (error.error.message.includes('username')) {
-                  errorMessage =
-                    'This username is already taken. Please choose a different username.';
-                  // Clear only the username field
-                  this.signUpForm.get('username')?.setValue('');
-                } else {
-                  errorMessage =
-                    'This account already exists. Please try signing in instead.';
-                }
-              } else {
-                errorMessage = error.error.message;
               }
             }
 
@@ -210,7 +183,7 @@ export class SignUpComponent implements OnDestroy {
             //^ Reset form submission state on error (but keep form data)
             this.formSubmitted = false;
             this.isSubmitting = false;
-          }
+          },
         });
     }
   }

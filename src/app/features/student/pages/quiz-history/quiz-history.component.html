@@ -1,47 +1,124 @@
-<!-- Quiz History (reads local_quiz_history) -->
-<div class="py-5 rounded-3xl w-full lg:pt-5 lg:mt-6 h-full" dataAos="fade-up" dataAosDuration="1000"
-    data-aos-delay="400">
-    <div class="flex justify-between items-center my-4 text-main font-semibold">
-        <span>Quizes</span>
-        <!-- <button pButton type="button" label="Clear All" class="p-button-outlined" (click)="clearHistory()"></button> -->
-    </div>
 
-    <div class="flex flex-col items-start px-2 py-6 lg:h-[75vh] lg:overflow-y-auto">
-        <div *ngIf="history.length === 0" class="text-gray-500 p-6">No history found.</div>
+<!-- Quiz History -->
+<div
+    class="w-full py-4 sm:py-6"
+    dataAos="fade-up"
+    dataAosDuration="1000"
+    data-aos-delay="400"
+>
 
-        <div *ngFor="let h of history"
-            class="lg:px-16 px-8 py-6 my-4 flex flex-col md:flex-row  justify-between items-center rounded-3xl shadow-lg w-full">
-            <div class="flex items-center justify-center">
-                <img class="w-16 me-4" src="imags/icon-test-h.png" alt="test-icon" />
-                <div class="font-semibold">
-                    <span class="text-gray-500 text-xs">{{ h.total }} Questions | </span>
-                    <span class="text-green-700 text-xs mt-3 ">
-                        {{ h.correct }} corrected
-                    </span>
-                    <span class="text-gray-500 text-xs mt-3  flex !items-center justify-between">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 ">
-                            <path
-                                d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM14.25 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" />
-                            <path fill-rule="evenodd"
-                                d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
-                                clip-rule="evenodd" />
-                        </svg>
+    <!-- Section Header -->
+    <div class="mb-5 flex items-center justify-between border-b border-slate-200 pb-4">
+        <div>
+            <span class="text-xs font-semibold uppercase tracking-wide text-[#0F766E]">
+                Your Activity
+            </span>
 
-                        {{ h.date |date:'short' }}
-                    </span>
-                </div>
-            </div>
-            <div class="flex flex-col items-center justify-center pt-20 md:pt-0">
-                <span class="text-black font-semibold text-xs mb-3">{{ h.percent }}%</span>
-
-                <button
-                    class="bg-main   text-white font-medium px-4 py-2 rounded-2xl btn-shadow transition-all duration-500 cursor-pointer"
-                    (click)="viewEntry(h)">
-                    View Result
-                </button>
-            </div>
+            <h2 class="mt-1 text-xl font-bold text-slate-900">
+                Quiz History
+            </h2>
         </div>
     </div>
 
+    <!-- History List -->
+    <div class="flex flex-col gap-4 lg:max-h-[75vh] lg:overflow-y-auto lg:pe-3">
+
+        <div
+            *ngIf="history.length === 0"
+            class="rounded-xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center"
+        >
+            <p class="text-sm font-medium text-slate-500">
+                No quiz history found.
+            </p>
+        </div>
+
+        <div
+            *ngFor="let h of history"
+            class="flex w-full flex-col gap-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_4px_18px_rgba(15,23,42,0.05)] transition-shadow duration-300 hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)] md:flex-row md:items-center md:justify-between md:p-6"
+        >
+
+            <!-- Quiz Information -->
+            <div class="flex min-w-0 items-center">
+
+                <div class="me-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-slate-100">
+                    <img
+                        class="h-9 w-9 object-contain"
+                        src="imags/icon-test-h.png"
+                        alt="test-icon"
+                    />
+                </div>
+
+                <div class="min-w-0">
+
+                    <h3 class="mb-2 text-base font-semibold text-slate-900">
+                        Quiz Attempt
+                    </h3>
+
+                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+
+                        <span class="text-xs text-slate-500">
+                            {{ h.total }} Questions
+                        </span>
+
+                        <span class="h-1 w-1 rounded-full bg-slate-300"></span>
+
+                        <span class="text-xs font-medium text-emerald-600">
+                            {{ h.correct }} Correct
+                        </span>
+
+                    </div>
+
+                    <div class="mt-2 flex items-center gap-1.5 text-xs text-slate-400">
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            class="h-4 w-4"
+                        >
+                            <path
+                                d="M12.75 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM7.5 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM8.25 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM9.75 15.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM10.5 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12 15.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM12.75 17.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 0 1.5ZM14.25 15.75a.75.75 0 1 1-1.5 0 0 0 0 1.5ZM15 17.25a.75.75 0 1 1-1.5 0 0 0 0 1.5ZM16.5 15.75a.75.75 0 1 1-1.5 0 0 0 0 1.5ZM15 12.75a.75.75 0 1 1-1.5 0 0 0 0 1.5ZM16.5 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                            />
+                            <path
+                                fill-rule="evenodd"
+                                d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+
+                        <span>{{ h.date | date:'short' }}</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Score + Action -->
+            <div class="flex items-center justify-between gap-6 md:justify-end">
+
+                <div class="text-center">
+                    <span class="block text-xl font-bold text-[#1E3A5F]">
+                        {{ h.percent }}%
+                    </span>
+
+                    <span class="mt-1 block text-[11px] font-medium uppercase tracking-wide text-slate-400">
+                        Score
+                    </span>
+                </div>
+
+                <button
+                    class="cursor-pointer rounded-lg bg-[#1E3A5F] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#17304f] focus:outline-none focus:ring-2 focus:ring-[#1E3A5F]/20"
+                    (click)="viewEntry(h)"
+                >
+                    View Result
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
+
