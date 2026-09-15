@@ -1,0 +1,33 @@
+<!--! Main Layout Container -->
+<div class="min-h-screen grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 overflow-x-hidden">
+  
+
+  <!-- !Left Column  -->
+  <div class=" lg:col-span-1 relative ">
+    <!--! Sidebar  -->
+    <app-auth-sidebar class="lg:fixed lg:w-1/3 xl:w-1/3 h-screen top-0 left-0 z-50"></app-auth-sidebar>
+  </div>
+  <!-- !Right Column  -->
+  <div
+    class=" col-span-1 xl:col-span-2  flex items-center justify-center flex-col xl:me-16 lg:me-6 min-h-screen relative ">
+    
+    <!--! Top Navigation - Fixed -->
+    <div
+      class="flex items-center  justify-center w-full mx-auto md:mt-0 mt-16 md:py-10 md:px-5 backdrop-blur-2xl bg-white/10 lg:fixed top-0  z-10"
+       dataAos="fade-left" dataAosDuration="1000" data-aos-delay="300">
+      <div class="flex ">
+        <span routerLink="/auth/sign-in" routerLinkActive="bg-blue-50 rounded-xl"
+          class="text-main font-bold text-sm lg:text-lg  py-2.5 px-4 cursor-pointer mx-4 ">Sign in</span>
+      </div>
+      <!-- </div> -->
+      <button routerLink="/auth/sign-up" routerLinkActive="bg-blue-50"
+        class="px-4 py-2 border border-blue-200 text-main text-sm lg:text-lg rounded-xl hover:bg-blue-50 cursor-pointer ">
+        Register
+      </button>
+    </div>
+    <!--! Router Outlet Container - Scrollable -->
+    <div class="flex-1 flex items-center justify-center ">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
